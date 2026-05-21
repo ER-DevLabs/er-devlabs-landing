@@ -62,7 +62,7 @@ export default function CTA() {
               </svg>
             </a>
             <a
-              href="https://wa.me/549XXXXXXXXXX"
+              href="https://wa.me/50663216443"
               className="flex items-center gap-2 w-full sm:w-auto justify-center px-7 py-3 border border-[#1a2332] hover:border-[#2d3f54] text-[#5a7191] hover:text-[#94a3b8] text-sm font-medium rounded-xl transition-all"
             >
               Escribir por WhatsApp
