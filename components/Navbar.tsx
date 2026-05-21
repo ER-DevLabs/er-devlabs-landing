@@ -2,12 +2,13 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
+import Logo from "./Logo";
 
 const NAV_LINKS = [
-  { label: "Products", href: "#" },
-  { label: "Services", href: "#services" },
-  { label: "Engineering", href: "#engineering" },
-  { label: "About", href: "#" },
+  { label: "Servicios", href: "#services" },
+  { label: "Proceso", href: "#engineering" },
+  { label: "Proyectos", href: "#product" },
+  { label: "Contacto", href: "#cta" },
 ];
 
 export default function Navbar() {
@@ -23,33 +24,11 @@ export default function Navbar() {
     >
       <motion.div
         style={{ borderBottomColor: `rgba(26,35,50,${borderOpacity})` }}
-        className="border-b border-transparent bg-[#070a0f]/80 backdrop-blur-md"
+        className="border-b border-transparent bg-[#070a0f]/85 backdrop-blur-md"
       >
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-blue-600 ring-1 ring-blue-500/30 shrink-0">
-              <svg
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
-              >
-                <rect x="2" y="3" width="5" height="1.8" rx="0.5" fill="white" fillOpacity="0.9" />
-                <rect x="2" y="6.8" width="7" height="1.8" rx="0.5" fill="white" fillOpacity="0.9" />
-                <rect x="2" y="10.6" width="5" height="1.8" rx="0.5" fill="white" fillOpacity="0.9" />
-                <rect x="12" y="3" width="4" height="9.4" rx="0.5" fill="white" fillOpacity="0.55" />
-              </svg>
-            </div>
-            <span className="text-sm font-semibold text-white tracking-tight">
-              ER DevLabs
-            </span>
-            <span className="hidden sm:inline-flex items-center text-[10px] font-mono text-[#3b5170] border border-[#1a2332] rounded px-1.5 py-0.5 tracking-widest">
-              SYS/2.1
-            </span>
-          </div>
+          <Logo size="sm" />
 
-          {/* Navigation */}
           <nav className="hidden md:flex items-center gap-0.5">
             {NAV_LINKS.map((link) => (
               <Link
@@ -62,24 +41,23 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Actions */}
           <div className="flex items-center gap-2">
             <Link
-              href="#"
+              href="#cta"
               className="hidden sm:block px-3 py-1.5 text-sm text-[#5a7191] hover:text-[#94a3b8] transition-colors"
             >
-              Contact
+              Contacto
             </Link>
             <Link
-              href="#"
-              className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors ring-1 ring-blue-500/20 shadow-lg shadow-blue-900/20"
+              href="#cta"
+              className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-medium text-white rounded-lg transition-all ring-1 shadow-lg"
+              style={{
+                background: "linear-gradient(135deg, #7c3aed, #0891b2)",
+                boxShadow: "0 4px 20px rgba(139,92,246,0.2)",
+              }}
             >
-              Start a Project
-              <svg
-                viewBox="0 0 16 16"
-                fill="none"
-                className="w-3.5 h-3.5"
-              >
+              Iniciar Proyecto
+              <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5">
                 <path
                   d="M3 8h10M9 4l4 4-4 4"
                   stroke="currentColor"

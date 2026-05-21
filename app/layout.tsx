@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ER DevLabs — Engineering Operational Software",
+  title: "ERDevLabs — Desarrollo de Software a Medida",
   description:
-    "Custom software infrastructure for growing companies. CRM systems, automation platforms, internal tools, and business infrastructure built for scale.",
+    "Webs de negocios, tiendas online, software a medida y consultoría tecnológica. Soluciones digitales diseñadas para hacer crecer tu empresa.",
   openGraph: {
-    title: "ER DevLabs — Engineering Operational Software",
+    title: "ERDevLabs — Desarrollo de Software a Medida",
     description:
-      "Custom software infrastructure for growing companies. CRM systems, automation platforms, internal tools, and business infrastructure.",
+      "Webs de negocios, tiendas online, software a medida y consultoría tecnológica para empresas que quieren crecer.",
     type: "website",
   },
 };

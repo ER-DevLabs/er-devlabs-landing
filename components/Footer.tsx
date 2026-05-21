@@ -1,13 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
+import Logo from "./Logo";
 
 const FOOTER_LINKS = {
-  Products: ["CRM Platform", "Automation Builder", "Internal Tools", "Infrastructure"],
-  Services: ["Custom Development", "System Architecture", "API Integration", "Consulting"],
-  Company: ["About", "Engineering Blog", "Careers", "Contact"],
-  Legal: ["Privacy Policy", "Terms of Service", "Security", "SLA"],
+  Servicios: ["Webs de Negocios", "Tiendas Online", "Software a Medida", "Consultoría"],
+  Empresa: ["Nosotros", "Portfolio", "Blog técnico", "Contacto"],
+  Soporte: ["Mantenimiento web", "Hosting & dominios", "Seguridad", "SLA & Uptime"],
+  Legal: ["Privacidad", "Términos de uso", "Política de cookies"],
 };
 
 export default function Footer() {
@@ -16,47 +16,28 @@ export default function Footer() {
       <div className="absolute inset-0 grid-dots opacity-20" />
 
       <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-8">
-        {/* Top section */}
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-10 mb-14">
-          {/* Brand column */}
+          {/* Brand */}
           <div className="col-span-2">
-            {/* Logo */}
-            <div className="flex items-center gap-3 mb-5">
-              <div className="flex items-center justify-center w-7 h-7 rounded-md bg-blue-600 ring-1 ring-blue-500/30">
-                <svg viewBox="0 0 18 18" fill="none" className="w-4 h-4">
-                  <rect x="2" y="3" width="5" height="1.8" rx="0.5" fill="white" fillOpacity="0.9" />
-                  <rect x="2" y="6.8" width="7" height="1.8" rx="0.5" fill="white" fillOpacity="0.9" />
-                  <rect x="2" y="10.6" width="5" height="1.8" rx="0.5" fill="white" fillOpacity="0.9" />
-                  <rect x="12" y="3" width="4" height="9.4" rx="0.5" fill="white" fillOpacity="0.55" />
-                </svg>
-              </div>
-              <span className="text-sm font-semibold text-white">ER DevLabs</span>
+            <div className="mb-5">
+              <Logo size="sm" />
             </div>
             <p className="text-[13px] text-[#3d5165] leading-relaxed max-w-[220px] mb-6">
-              Engineering operational software for companies that need systems built to last.
+              Desarrollo de software a medida, webs de negocios, tiendas online y consultoría tecnológica para empresas que quieren crecer.
             </p>
-            {/* Status */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#1a2332] bg-[#0a1018]">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span className="text-[10px] font-mono text-[#2d3f54]">
-                All systems operational
-              </span>
+              <span className="text-[10px] font-mono text-[#2d3f54]">Todos los sistemas operativos</span>
             </div>
           </div>
 
-          {/* Link columns */}
           {Object.entries(FOOTER_LINKS).map(([group, links]) => (
             <div key={group}>
-              <h4 className="text-[10px] font-mono text-[#2d3f54] uppercase tracking-[0.14em] mb-4">
-                {group}
-              </h4>
+              <h4 className="text-[10px] font-mono text-[#2d3f54] uppercase tracking-[0.14em] mb-4">{group}</h4>
               <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link}>
-                    <Link
-                      href="#"
-                      className="text-[13px] text-[#3d5165] hover:text-[#64748b] transition-colors"
-                    >
+                    <Link href="#" className="text-[13px] text-[#3d5165] hover:text-[#64748b] transition-colors">
                       {link}
                     </Link>
                   </li>
@@ -66,18 +47,16 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Divider */}
         <div className="section-divider mb-6" />
 
-        {/* Bottom row */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono text-[#2d3f54]">
             <span>© 2025 ER DevLabs</span>
             <span className="text-[#1a2332]">·</span>
-            <span>Built with Next.js · Tailwind · Framer Motion</span>
+            <span>Hecho con Next.js · Tailwind · Framer Motion</span>
             <span className="text-[#1a2332]">·</span>
             <span className="flex items-center gap-1.5">
-              <span className="w-1 h-1 rounded-full bg-emerald-500/60" />
+              <span className="w-1 h-1 rounded-full" style={{ background: "#8B5CF6" }} />
               v2.1.0
             </span>
           </div>
