@@ -138,6 +138,79 @@ export default function EngineeringApproach() {
             ))}
           </div>
         </motion.div>
+
+        {/* Tech stack architecture diagram */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mt-24"
+        >
+          <div className="text-center mb-10">
+            <h3 className="text-xl font-semibold text-[#cbd5e1] tracking-tight mb-2">Stack tecnológico</h3>
+            <p className="text-[13px] text-[#3d5165]">Cada capa, elegida por razones técnicas — no por moda.</p>
+          </div>
+
+          <div className="border border-[#1a2332] rounded-2xl overflow-hidden">
+            {[
+              {
+                layer: "Frontend",
+                icon: "◈",
+                items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+                color: "#8B5CF6",
+                desc: "Interfaces rápidas, accesibles y responsive — construidas para el usuario final.",
+              },
+              {
+                layer: "Backend",
+                icon: "⬡",
+                items: ["Node.js", "Express", "REST APIs", "Auth / JWT", "Workers"],
+                color: "#06B6D4",
+                desc: "APIs robustas, seguras y escalables que conectan cada pieza del sistema.",
+              },
+              {
+                layer: "Base de datos",
+                icon: "◉",
+                items: ["PostgreSQL", "Redis", "MongoDB", "Backups diarios", "Migraciones"],
+                color: "#8B5CF6",
+                desc: "Persistencia confiable, modelado correcto y datos siempre disponibles.",
+              },
+              {
+                layer: "Infraestructura",
+                icon: "⬢",
+                items: ["Vercel", "AWS", "Docker", "CI/CD", "CDN · SSL · Monitoreo"],
+                color: "#06B6D4",
+                desc: "Deploy automatizado, alta disponibilidad y observabilidad desde el día uno.",
+              },
+            ].map((row, i, arr) => (
+              <div
+                key={row.layer}
+                className="group flex flex-col sm:flex-row sm:items-center gap-4 px-6 py-5 hover:bg-[#0c1117]/80 transition-colors duration-150"
+                style={{ borderBottom: i < arr.length - 1 ? "1px solid #1a2332" : undefined }}
+              >
+                <div className="flex items-center gap-3 sm:w-40 shrink-0">
+                  <span className="text-base leading-none" style={{ color: row.color, opacity: 0.7 }}>{row.icon}</span>
+                  <span className="text-[11px] font-mono uppercase tracking-[0.12em]" style={{ color: row.color }}>
+                    {row.layer}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 flex-1">
+                  {row.items.map((item) => (
+                    <span
+                      key={item}
+                      className="text-[10px] font-mono px-2 py-0.5 rounded border"
+                      style={{ color: "#4a6580", borderColor: "#1a2332", background: "#0a1018" }}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-[11px] text-[#2d3f54] sm:w-56 shrink-0 leading-relaxed group-hover:text-[#3d5165] transition-colors">
+                  {row.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

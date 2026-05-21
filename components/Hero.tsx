@@ -3,102 +3,84 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+const DEPLOYMENTS = [
+  { project: "Ferretería Don Carlos", domain: "carlosferreteria.cr", fw: "Next.js", status: "live", commit: "a9f3c1d", ago: "hace 2h" },
+  { project: "Boutique Elena", domain: "boutiqueelena.com", fw: "Shopify", status: "live", commit: "b7e92fa", ago: "hace 1d" },
+  { project: "TallerMec Pro", domain: "tallermecpro.cr", fw: "React", status: "building", commit: "c3d18e2", ago: "ahora" },
+  { project: "Inmob. Pacífico", domain: "inmopacifico.com", fw: "WordPress", status: "live", commit: "f1a6b93", ago: "hace 3d" },
+  { project: "RestaurantApp CR", domain: "restaurantapp.cr", fw: "Node.js", status: "preview", commit: "e0c7a44", ago: "hace 5h" },
+];
 
-interface LogEntry {
-  id: number;
-  method: HttpMethod;
-  path: string;
-  status: number;
-  ms: number;
-  ts: string;
+const VITALS = [
+  { key: "LCP", value: "0.8s", score: 92, label: "Largest Contentful Paint" },
+  { key: "CLS", value: "0.01", score: 98, label: "Cumulative Layout Shift" },
+  { key: "INP", value: "48ms", score: 89, label: "Interaction to Next Paint" },
+];
+
+const QUEUE = [
+  { name: "Deploy · ferretería (main)", status: "running", pct: 74 },
+  { name: "Review PR · boutique landing", status: "queued", pct: 0 },
+  { name: "Migración DB · tallermec", status: "running", pct: 42 },
+  { name: "Backup automático · srv-01", status: "done", pct: 100 },
+];
+
+function StatusBadge({ status }: { status: string }) {
+  if (status === "live")
+    return (
+      <span className="flex items-center gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-dot" />
+        <span className="text-[10px] font-mono text-emerald-400">Live</span>
+      </span>
+    );
+  if (status === "building")
+    return (
+      <span className="flex items-center gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse-dot" />
+        <span className="text-[10px] font-mono text-violet-400">Building</span>
+      </span>
+    );
+  return (
+    <span className="flex items-center gap-1.5">
+      <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+      <span className="text-[10px] font-mono text-cyan-400">Preview</span>
+    </span>
+  );
 }
 
-const LOG_POOL: { method: HttpMethod; path: string; status: number; ms: number }[] = [
-  { method: "POST", path: "/api/checkout/session", status: 201, ms: 18 },
-  { method: "GET", path: "/api/products?cat=ropa", status: 200, ms: 12 },
-  { method: "PUT", path: "/api/orders/1148/status", status: 200, ms: 9 },
-  { method: "POST", path: "/api/contact/form", status: 201, ms: 6 },
-  { method: "GET", path: "/api/dashboard/stats", status: 200, ms: 22 },
-  { method: "POST", path: "/api/newsletter/subscribe", status: 201, ms: 5 },
-  { method: "PATCH", path: "/api/products/447", status: 200, ms: 11 },
-  { method: "GET", path: "/api/cart/session/a9f2", status: 200, ms: 8 },
-  { method: "POST", path: "/api/webhook/payment", status: 200, ms: 7 },
-  { method: "DELETE", path: "/api/cart/item/88", status: 204, ms: 4 },
-  { method: "GET", path: "/api/analytics/weekly", status: 200, ms: 31 },
-  { method: "PUT", path: "/api/inventory/update", status: 200, ms: 14 },
-];
-
-const METHOD_COLORS: Record<HttpMethod, string> = {
-  GET: "#60a5fa",
-  POST: "#34d399",
-  PUT: "#a78bfa",
-  DELETE: "#f87171",
-  PATCH: "#fbbf24",
-};
-
-function statusColor(s: number) {
-  if (s < 300) return "#10b981";
-  if (s < 400) return "#f59e0b";
-  return "#ef4444";
+function FwBadge({ fw }: { fw: string }) {
+  const color = fw === "Next.js" ? "#94a3b8" : fw === "Shopify" ? "#95bf47" : fw === "React" ? "#61dafb" : fw === "WordPress" ? "#21759b" : "#f59e0b";
+  return (
+    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded border" style={{ color, borderColor: color + "30", background: color + "10" }}>
+      {fw}
+    </span>
+  );
 }
-
-function nowTime() {
-  return new Date().toTimeString().slice(0, 8);
-}
-
-const QUEUE_TASKS = [
-  { name: "Deploy cliente A · ecommerce", status: "running", progress: 74, color: "#8B5CF6" },
-  { name: "Review PR · landing page B", status: "queued", progress: 0, color: "#1a2332" },
-  { name: "Migración DB · cliente C", status: "running", progress: 42, color: "#06B6D4" },
-  { name: "Backup automático · servidor 1", status: "done", progress: 100, color: "#10b981" },
-];
-
-const METRICS = [
-  { label: "Proyectos activos", value: "12", trend: "+2 este mes" },
-  { label: "Uptime promedio", value: "99.97%", trend: null },
-  { label: "Clientes satisfechos", value: "50+", trend: null },
-];
-
-const DEPLOY_STAGES = [
-  { name: "Build", status: "done" },
-  { name: "Tests", status: "done" },
-  { name: "Staging", status: "done" },
-  { name: "Producción", status: "running" },
-];
 
 export default function Hero() {
-  const indexRef = useRef(0);
-  const [logs, setLogs] = useState<LogEntry[]>(() =>
-    LOG_POOL.slice(0, 6).map((l, i) => ({ ...l, id: i, ts: "09:41:22" }))
-  );
+  const [activeDeploy, setActiveDeploy] = useState<number | null>(null);
+  const buildRef = useRef(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const raw = LOG_POOL[indexRef.current % LOG_POOL.length];
-      indexRef.current += 1;
-      setLogs((prev) => [...prev.slice(-5), { ...raw, id: Date.now(), ts: nowTime() }]);
-    }, 1700);
-    return () => clearInterval(interval);
+    const t = setInterval(() => {
+      buildRef.current = (buildRef.current + 1) % QUEUE.length;
+    }, 3200);
+    return () => clearInterval(t);
   }, []);
 
   return (
     <section className="relative min-h-screen pt-14 overflow-hidden">
-      <div className="absolute inset-0 grid-dots opacity-60" />
+      <div className="absolute inset-0 grid-dots opacity-50" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.06) 0%, transparent 65%)",
-        }}
+        style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.07) 0%, transparent 65%)" }}
       />
 
       <div className="relative max-w-7xl mx-auto px-6 pt-24 pb-16 lg:pt-32 lg:pb-24">
         <div className="grid lg:grid-cols-12 gap-14 lg:gap-10 items-start">
+
           {/* ── LEFT ── */}
           <div className="lg:col-span-5 space-y-9 lg:pt-8">
-            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -111,7 +93,6 @@ export default function Hero() {
               </span>
             </motion.div>
 
-            {/* Headline */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -121,17 +102,13 @@ export default function Hero() {
                 Construimos el software que hace crecer{" "}
                 <span
                   className="text-transparent bg-clip-text"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(135deg, #a78bfa 0%, #8B5CF6 40%, #06B6D4 100%)",
-                  }}
+                  style={{ backgroundImage: "linear-gradient(135deg, #a78bfa 0%, #8B5CF6 40%, #06B6D4 100%)" }}
                 >
                   tu negocio.
                 </span>
               </h1>
             </motion.div>
 
-            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -143,7 +120,6 @@ export default function Hero() {
               cada empresa.
             </motion.p>
 
-            {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -171,7 +147,6 @@ export default function Hero() {
               </a>
             </motion.div>
 
-            {/* Stats */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -184,168 +159,142 @@ export default function Hero() {
                 { value: "100%", label: "Satisfacción garantizada" },
               ].map((s) => (
                 <div key={s.label}>
-                  <div className="text-[22px] font-semibold text-[#f1f5f9] tracking-tight">
-                    {s.value}
-                  </div>
+                  <div className="text-[22px] font-semibold text-[#f1f5f9] tracking-tight">{s.value}</div>
                   <div className="text-[11px] text-[#3d5165] mt-0.5">{s.label}</div>
                 </div>
               ))}
             </motion.div>
           </div>
 
-          {/* ── RIGHT: Live panels ── */}
+          {/* ── RIGHT: Dashboard panels ── */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
             className="lg:col-span-7 grid grid-cols-2 gap-3"
           >
-            {/* API Log */}
+            {/* Deployments table */}
             <div className="col-span-2 panel overflow-hidden">
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1a2332]">
                 <div className="flex items-center gap-2.5">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse-dot" />
-                  <span className="text-[11px] font-mono text-[#64748b] tracking-[0.14em] uppercase">
-                    API Gateway
-                  </span>
+                  <span className="text-[11px] font-mono text-[#64748b] tracking-[0.14em] uppercase">Proyectos activos</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-mono text-[#2d3f54]">api.erdevlabs.com</span>
+                  <span className="text-[10px] font-mono text-[#2d3f54]">erdevlabs / dashboard</span>
                   <span className="text-[10px] font-mono text-emerald-500/90 bg-emerald-500/10 border border-emerald-500/15 px-2 py-0.5 rounded-full">
-                    LIVE
+                    {DEPLOYMENTS.filter(d => d.status === "live").length} live
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-3 px-4 py-1.5 border-b border-[#0f1924]">
-                {["HORA", "MÉTODO", "ENDPOINT", "STATUS", "LAT"].map((h, i) => (
-                  <span
-                    key={h}
-                    className="text-[9px] font-mono text-[#2d3f54] uppercase tracking-widest"
-                    style={{ width: i === 0 ? 56 : i === 1 ? 56 : i === 2 ? undefined : i === 3 ? 32 : 40, flex: i === 2 ? 1 : undefined, textAlign: i >= 3 ? "right" : undefined }}
-                  >
-                    {h}
-                  </span>
+
+              {/* Table header */}
+              <div className="grid grid-cols-[1fr_90px_80px_68px] gap-0 px-4 py-1.5 border-b border-[#0f1924]">
+                {["Proyecto", "Framework", "Estado", "Commit"].map((h) => (
+                  <span key={h} className="text-[9px] font-mono text-[#2d3f54] uppercase tracking-widest">{h}</span>
                 ))}
               </div>
-              <div className="px-2 py-1.5 space-y-0.5 min-h-[156px]">
-                <AnimatePresence initial={false}>
-                  {logs.map((log) => (
-                    <motion.div
-                      key={log.id}
-                      initial={{ opacity: 0, backgroundColor: "rgba(139,92,246,0.08)" }}
-                      animate={{ opacity: 1, backgroundColor: "rgba(139,92,246,0)" }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="flex items-center gap-3 px-2 py-1 rounded-md"
-                    >
-                      <span className="text-[10px] font-mono text-[#2d3f54] shrink-0 w-14 tabular-nums">{log.ts}</span>
-                      <span
-                        className="text-[10px] font-mono font-medium shrink-0 w-14 text-center rounded px-1 py-0.5"
-                        style={{ color: METHOD_COLORS[log.method], background: METHOD_COLORS[log.method] + "18" }}
-                      >
-                        {log.method}
-                      </span>
-                      <span className="text-[11px] font-mono text-[#4a6580] truncate flex-1">{log.path}</span>
-                      <span className="shrink-0 text-[10px] font-mono font-medium tabular-nums w-8 text-right" style={{ color: statusColor(log.status) }}>{log.status}</span>
-                      <span className="shrink-0 text-[10px] font-mono text-[#334155] tabular-nums w-10 text-right">{log.ms}ms</span>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+
+              {/* Table rows */}
+              <div className="divide-y divide-[#0f1924]">
+                {DEPLOYMENTS.map((dep, i) => (
+                  <motion.div
+                    key={dep.project}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 + i * 0.06 }}
+                    className="grid grid-cols-[1fr_90px_80px_68px] gap-0 px-4 py-2.5 hover:bg-[#0f1924]/60 transition-colors cursor-default"
+                    onMouseEnter={() => setActiveDeploy(i)}
+                    onMouseLeave={() => setActiveDeploy(null)}
+                  >
+                    <div className="min-w-0">
+                      <div className="text-[12px] text-[#94a3b8] truncate">{dep.project}</div>
+                      <div className="text-[10px] font-mono text-[#2d3f54] truncate">{dep.domain}</div>
+                    </div>
+                    <div className="flex items-center"><FwBadge fw={dep.fw} /></div>
+                    <div className="flex items-center"><StatusBadge status={dep.status} /></div>
+                    <div className="flex items-center">
+                      <span className="text-[10px] font-mono text-[#2d3f54]">{dep.commit}</span>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
 
-            {/* Métricas */}
+            {/* Core Web Vitals */}
             <div className="panel overflow-hidden">
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1a2332]">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span className="text-[11px] font-mono text-[#64748b] tracking-[0.14em] uppercase">Estado</span>
+                  <span className="text-[11px] font-mono text-[#64748b] tracking-[0.14em] uppercase">Web Vitals</span>
                 </div>
-                <span className="text-[10px] font-mono text-emerald-600">Operacional</span>
-              </div>
-              <div className="p-4 space-y-5">
-                {METRICS.map((m) => (
-                  <div key={m.label}>
-                    <div className="flex items-baseline justify-between mb-1">
-                      <span className="text-[10px] text-[#3d5165] font-mono uppercase tracking-[0.1em]">{m.label}</span>
-                      {m.trend && <span className="text-[10px] text-emerald-500 font-mono">{m.trend}</span>}
-                    </div>
-                    <span className="text-xl font-semibold text-[#e2e8f0] tabular-nums tracking-tight">{m.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Cola de tareas */}
-            <div className="panel overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1a2332]">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-violet-500" />
-                  <span className="text-[11px] font-mono text-[#64748b] tracking-[0.14em] uppercase">Cola de tareas</span>
-                </div>
-                <span className="text-[10px] font-mono text-[#2d3f54]">4 tareas</span>
+                <span className="text-[10px] font-mono text-[#2d3f54]">promedio clientes</span>
               </div>
               <div className="p-4 space-y-4">
-                {QUEUE_TASKS.map((t) => (
-                  <div key={t.name}>
+                {VITALS.map((v, i) => (
+                  <motion.div
+                    key={v.key}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + i * 0.08 }}
+                  >
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[11px] text-[#5a7191] truncate">{t.name}</span>
-                      <span className="text-[10px] font-mono ml-2 shrink-0" style={{ color: t.status === "done" ? "#10b981" : t.status === "running" ? "#a78bfa" : "#3d5165" }}>
-                        {t.status}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-mono text-[#64748b]">{v.key}</span>
+                        <span className="text-[10px] font-semibold text-[#e2e8f0]">{v.value}</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-emerald-400">{v.score}</span>
                     </div>
                     <div className="h-1 rounded-full bg-[#0f1924] overflow-hidden">
                       <motion.div
                         className="h-full rounded-full"
-                        style={{ background: t.color }}
+                        style={{ background: "linear-gradient(90deg, #10b981, #34d399)" }}
                         initial={{ width: 0 }}
-                        animate={{ width: `${t.progress}%` }}
-                        transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
+                        animate={{ width: `${v.score}%` }}
+                        transition={{ duration: 1.1, delay: 0.6 + i * 0.1, ease: "easeOut" }}
                       />
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
+                <div className="pt-1 border-t border-[#0f1924]">
+                  <span className="text-[10px] font-mono text-[#2d3f54]">Google PageSpeed · Core Web Vitals</span>
+                </div>
               </div>
             </div>
 
-            {/* Pipeline de deploy */}
-            <div className="col-span-2 panel overflow-hidden">
+            {/* Automation Queue */}
+            <div className="panel overflow-hidden">
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1a2332]">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-violet-400 animate-pulse-dot" style={{ animationDelay: "0.5s" }} />
-                  <span className="text-[11px] font-mono text-[#64748b] tracking-[0.14em] uppercase">Pipeline de Despliegue</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-violet-500 animate-pulse-dot" style={{ animationDelay: "0.4s" }} />
+                  <span className="text-[11px] font-mono text-[#64748b] tracking-[0.14em] uppercase">Cola de tareas</span>
                 </div>
-                <span className="text-[10px] font-mono text-[#2d3f54]">main · commit e7b3a12</span>
+                <span className="text-[10px] font-mono text-[#2d3f54]">{QUEUE.filter(q => q.status !== "done").length} pendientes</span>
               </div>
-              <div className="px-6 py-4 flex items-center gap-0">
-                {DEPLOY_STAGES.map((stage, i) => (
-                  <div key={stage.name} className="flex items-center flex-1 min-w-0">
-                    <div className="flex flex-col items-center gap-1.5 flex-1">
-                      <div
-                        className="w-7 h-7 rounded-full border-2 flex items-center justify-center"
-                        style={{
-                          borderColor: stage.status === "done" ? "#10b981" : stage.status === "running" ? "#8B5CF6" : "#1a2332",
-                          background: stage.status === "done" ? "rgba(16,185,129,0.12)" : stage.status === "running" ? "rgba(139,92,246,0.12)" : "#0c1117",
-                        }}
-                      >
-                        {stage.status === "done" && (
-                          <svg viewBox="0 0 12 12" fill="none" className="w-3 h-3">
-                            <path d="M2 6l3 3 5-5" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        )}
-                        {stage.status === "running" && (
-                          <div className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
-                        )}
+              <div className="p-4 space-y-3.5">
+                {QUEUE.map((t, i) => {
+                  const color = t.status === "done" ? "#10b981" : t.status === "running" ? "#8B5CF6" : "#1e2d3f";
+                  const labelColor = t.status === "done" ? "#10b981" : t.status === "running" ? "#a78bfa" : "#3d5165";
+                  return (
+                    <div key={t.name}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[11px] text-[#5a7191] truncate">{t.name}</span>
+                        <span className="text-[10px] font-mono ml-2 shrink-0" style={{ color: labelColor }}>
+                          {t.status}
+                        </span>
                       </div>
-                      <span className="text-[10px] font-mono" style={{ color: stage.status === "done" ? "#10b981" : stage.status === "running" ? "#a78bfa" : "#2d3f54" }}>
-                        {stage.name}
-                      </span>
+                      <div className="h-0.5 rounded-full bg-[#0f1924] overflow-hidden">
+                        <motion.div
+                          className="h-full rounded-full"
+                          style={{ background: color }}
+                          initial={{ width: 0 }}
+                          animate={{ width: `${t.pct}%` }}
+                          transition={{ duration: 1.2, delay: 0.6 + i * 0.1, ease: "easeOut" }}
+                        />
+                      </div>
                     </div>
-                    {i < DEPLOY_STAGES.length - 1 && (
-                      <div className="flex-1 h-px mx-1 max-w-[40px]" style={{ background: i < 2 ? "#10b981" : "#1a2332" }} />
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </motion.div>

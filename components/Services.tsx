@@ -5,72 +5,47 @@ import { motion } from "framer-motion";
 const SERVICES = [
   {
     id: "web",
+    num: "01",
     category: "Webs de Negocios",
     headline: "Sitios web que convierten visitas en clientes",
     description:
       "Landing pages, portales corporativos y webs institucionales con diseño premium, rendimiento optimizado y foco en conversión. Cada sitio, hecho a la medida de tu marca.",
     tags: ["Next.js", "WordPress", "Tailwind CSS", "SEO", "Analytics"],
     spec: "Mobile-first · Core Web Vitals · SSL",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
-        <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M8 21h8M12 17v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M2 7h20" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-    ),
-    highlight: false,
     accentColor: "#8B5CF6",
   },
   {
     id: "ecommerce",
+    num: "02",
     category: "Tiendas Online",
     headline: "E-commerce listo para vender desde el día uno",
     description:
       "Catálogo de productos, pagos integrados con Stripe y MercadoPago, gestión de pedidos y panel de control completo. Tu tienda, a tu ritmo, sin comisiones extra.",
     tags: ["Shopify", "WooCommerce", "Stripe", "MercadoPago", "Node.js"],
     spec: "Pagos seguros · Gestión de stock · Panel admin",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
-        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M3 6h18" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M16 10a4 4 0 01-8 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    highlight: true,
     accentColor: "#06B6D4",
+    highlight: true,
   },
   {
     id: "software",
+    num: "03",
     category: "Software a Medida",
     headline: "Sistemas operacionales pensados para tu negocio",
     description:
       "CRMs, plataformas de automatización, herramientas internas y sistemas de gestión — construidos sobre tus procesos reales, no plantillas genéricas.",
     tags: ["React", "Node.js", "PostgreSQL", "REST APIs", "Docker"],
     spec: "Multi-usuario · RBAC · Integraciones",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
-        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
-      </svg>
-    ),
-    highlight: false,
     accentColor: "#8B5CF6",
   },
   {
     id: "consulting",
+    num: "04",
     category: "Consultoría & Mantenimiento",
     headline: "Tu equipo técnico externo de confianza",
     description:
       "Auditorías de rendimiento y seguridad, asesoramiento tecnológico, actualizaciones continuas y soporte para que tu web siempre esté operativa y al día.",
     tags: ["Auditoría", "Performance", "Seguridad", "Hosting", "SLA"],
     spec: "Soporte mensual · SLA 99.9% · Respuesta < 24h",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    highlight: false,
     accentColor: "#06B6D4",
   },
 ];
@@ -106,70 +81,75 @@ export default function Services() {
           </div>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 gap-4">
+        {/* Services list — table-style */}
+        <div className="border border-[#1a2332] rounded-2xl overflow-hidden">
           {SERVICES.map((service, i) => (
             <motion.div
               key={service.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.45, delay: i * 0.07 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.4, delay: i * 0.07 }}
               className="group relative"
+              style={{
+                borderBottom: i < SERVICES.length - 1 ? "1px solid #1a2332" : undefined,
+                background: service.highlight ? `${service.accentColor}05` : "transparent",
+              }}
             >
-              <div
-                className="relative flex flex-col h-full p-6 rounded-2xl border transition-all duration-200 overflow-hidden"
-                style={{
-                  background: service.highlight ? `${service.accentColor}08` : "#0c1117",
-                  borderColor: service.highlight ? `${service.accentColor}30` : "#1a2332",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = `${service.accentColor}40`;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = service.highlight ? `${service.accentColor}30` : "#1a2332";
-                }}
-              >
-                {service.highlight && (
-                  <div
-                    className="absolute top-0 left-6 right-6 h-px"
-                    style={{ background: `linear-gradient(90deg, transparent, ${service.accentColor}50, transparent)` }}
-                  />
-                )}
+              {service.highlight && (
+                <div
+                  className="absolute left-0 top-0 bottom-0 w-px"
+                  style={{ background: `linear-gradient(180deg, transparent, ${service.accentColor}40, transparent)` }}
+                />
+              )}
 
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2.5">
-                    <div
-                      className="p-2.5 rounded-lg"
-                      style={{ background: `${service.accentColor}15`, color: service.accentColor }}
-                    >
-                      {service.icon}
+              <div className="flex items-start gap-5 px-6 py-6 hover:bg-[#0c1117]/60 transition-colors duration-150 cursor-default">
+                {/* Number */}
+                <span
+                  className="text-[11px] font-mono mt-0.5 shrink-0 w-7 tabular-nums"
+                  style={{ color: service.highlight ? service.accentColor : "#2d3f54" }}
+                >
+                  {service.num}
+                </span>
+
+                {/* Main content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-2.5">
+                    <div>
+                      <span
+                        className="text-[11px] font-mono uppercase tracking-[0.1em] mr-3"
+                        style={{ color: service.highlight ? service.accentColor : "#3d5165" }}
+                      >
+                        {service.category}
+                      </span>
                     </div>
-                    <span
-                      className="text-[11px] font-mono uppercase tracking-[0.1em]"
-                      style={{ color: service.highlight ? service.accentColor : "#3d5165" }}
-                    >
-                      {service.category}
-                    </span>
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1.5 sm:justify-end">
+                      {service.tags.slice(0, 4).map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[9px] font-mono px-2 py-0.5 rounded border"
+                          style={{ color: "#3d5165", borderColor: "#1a2332", background: "#0a1018" }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4 text-[#1a2332] group-hover:text-[#2d3f54] transition-colors">
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+
+                  <h3 className="text-[15px] font-medium text-[#94a3b8] group-hover:text-[#cbd5e1] transition-colors mb-2 leading-snug">
+                    {service.headline}
+                  </h3>
+                  <p className="text-[12px] text-[#3d5165] leading-relaxed max-w-2xl">{service.description}</p>
+
+                  <div className="mt-3 text-[10px] font-mono text-[#2d3f54] tracking-wide">{service.spec}</div>
                 </div>
 
-                <h3 className="text-[16px] font-medium text-[#cbd5e1] leading-snug mb-3">{service.headline}</h3>
-                <p className="text-[13px] text-[#3d5165] leading-relaxed mb-6 flex-1">{service.description}</p>
-                <div className="text-[10px] font-mono text-[#2d3f54] mb-4 tracking-wide">{service.spec}</div>
-
-                <div className="flex flex-wrap gap-1.5">
-                  {service.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[10px] font-mono px-2 py-0.5 rounded border"
-                      style={{ color: "#3d5165", borderColor: "#1a2332", background: "#0a1018" }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                {/* Arrow */}
+                <div className="shrink-0 mt-1 text-[#1a2332] group-hover:text-[#2d3f54] group-hover:translate-x-0.5 transition-all duration-150">
+                  <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </div>
               </div>
             </motion.div>
