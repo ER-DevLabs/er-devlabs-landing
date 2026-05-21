@@ -58,7 +58,7 @@ export default function Home() {
       </p>
 
       <a
-        href="mailto:hola@erdevlabs.com"
+        href="mailto:elias@erdevlabs.com"
         style={{
           display: "inline-flex",
           alignItems: "center",
@@ -72,7 +72,7 @@ export default function Home() {
           textDecoration: "none",
         }}
       >
-        hola@erdevlabs.com
+        elias@erdevlabs.com
       </a>
     </main>
   );
