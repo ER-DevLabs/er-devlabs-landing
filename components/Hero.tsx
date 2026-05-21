@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const DEPLOYMENTS = [
-  { project: "Ferretería Don Carlos", domain: "carlosferreteria.cr", fw: "Next.js", status: "live", commit: "a9f3c1d", ago: "hace 2h" },
-  { project: "Boutique Elena", domain: "boutiqueelena.com", fw: "Shopify", status: "live", commit: "b7e92fa", ago: "hace 1d" },
-  { project: "TallerMec Pro", domain: "tallermecpro.cr", fw: "React", status: "building", commit: "c3d18e2", ago: "ahora" },
-  { project: "Inmob. Pacífico", domain: "inmopacifico.com", fw: "WordPress", status: "live", commit: "f1a6b93", ago: "hace 3d" },
-  { project: "RestaurantApp CR", domain: "restaurantapp.cr", fw: "Node.js", status: "preview", commit: "e0c7a44", ago: "hace 5h" },
+  { project: "ER-Iron", domain: "er-iron.com", fw: "Next.js", status: "live", commit: "3f9a1c7", ago: "hace 1h", own: true },
+  { project: "Boutique Elena", domain: "boutiqueelena.com", fw: "Shopify", status: "live", commit: "b7e92fa", ago: "hace 1d", own: false },
+  { project: "TallerMec Pro", domain: "tallermecpro.cr", fw: "React", status: "building", commit: "c3d18e2", ago: "ahora", own: false },
+  { project: "Inmob. Pacífico", domain: "inmopacifico.com", fw: "WordPress", status: "live", commit: "f1a6b93", ago: "hace 3d", own: false },
+  { project: "RestaurantApp CR", domain: "restaurantapp.cr", fw: "Node.js", status: "preview", commit: "e0c7a44", ago: "hace 5h", own: false },
 ];
 
 const VITALS = [
@@ -18,7 +18,7 @@ const VITALS = [
 ];
 
 const QUEUE = [
-  { name: "Deploy · ferretería (main)", status: "running", pct: 74 },
+  { name: "Deploy · er-iron.com (main)", status: "running", pct: 74 },
   { name: "Review PR · boutique landing", status: "queued", pct: 0 },
   { name: "Migración DB · tallermec", status: "running", pct: 42 },
   { name: "Backup automático · srv-01", status: "done", pct: 100 },
@@ -203,12 +203,23 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 + i * 0.06 }}
-                    className="grid grid-cols-[1fr_90px_80px_68px] gap-0 px-4 py-2.5 hover:bg-[#0f1924]/60 transition-colors cursor-default"
+                    className="grid grid-cols-[1fr_90px_80px_68px] gap-0 px-4 py-2.5 hover:bg-[#0f1924]/60 transition-colors cursor-default relative"
+                    style={dep.own ? { background: "rgba(139,92,246,0.04)" } : undefined}
                     onMouseEnter={() => setActiveDeploy(i)}
                     onMouseLeave={() => setActiveDeploy(null)}
                   >
+                    {dep.own && (
+                      <div className="absolute left-0 top-0 bottom-0 w-px" style={{ background: "linear-gradient(180deg, transparent, #8B5CF6, transparent)" }} />
+                    )}
                     <div className="min-w-0">
-                      <div className="text-[12px] text-[#94a3b8] truncate">{dep.project}</div>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`text-[12px] truncate ${dep.own ? "text-[#c4b5fd]" : "text-[#94a3b8]"}`}>{dep.project}</span>
+                        {dep.own && (
+                          <span className="text-[8px] font-mono px-1 py-0.5 rounded" style={{ color: "#8B5CF6", background: "rgba(139,92,246,0.12)", border: "1px solid rgba(139,92,246,0.2)" }}>
+                            nuestro
+                          </span>
+                        )}
+                      </div>
                       <div className="text-[10px] font-mono text-[#2d3f54] truncate">{dep.domain}</div>
                     </div>
                     <div className="flex items-center"><FwBadge fw={dep.fw} /></div>
