@@ -1,42 +1,34 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  variable: "--font-space-grotesk",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "ERDevLabs — Desarrollo de Software a Medida",
+  title: "ERDevLabs — Soluciones Digitales que Convierten.",
   description:
-    "Webs de negocios, tiendas online, software a medida y consultoría tecnológica. Soluciones digitales diseñadas para hacer crecer tu empresa.",
+    "Construimos software de alto impacto para empresas que quieren escalar. Webs de negocio, tiendas online, software a medida y consultoría tecnológica.",
   openGraph: {
-    title: "ERDevLabs — Desarrollo de Software a Medida",
+    title: "ERDevLabs — Soluciones Digitales que Convierten.",
     description:
-      "Webs de negocios, tiendas online, software a medida y consultoría tecnológica para empresas que quieren crecer.",
+      "Construimos software de alto impacto para empresas que quieren escalar.",
     type: "website",
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-    >
-      <body className="antialiased">{children}</body>
+    <html lang="es" className={spaceGrotesk.variable}>
+      <body>{children}</body>
     </html>
   );
 }
