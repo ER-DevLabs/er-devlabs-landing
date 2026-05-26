@@ -64,6 +64,16 @@ const techs = [
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
     invert: false,
   },
+  {
+    name: "n8n",
+    icon: "https://cdn.simpleicons.org/n8n",
+    invert: false,
+  },
+  {
+    name: "Retell AI",
+    icon: "/retell-ai-icon.svg",
+    invert: false,
+  },
 ];
 
 export default function TechStackSection() {
@@ -119,6 +129,7 @@ export default function TechStackSection() {
               </span>
             </motion.div>
           ))}
+
         </div>
       </div>
     </section>

@@ -1,12 +1,11 @@
 "use client";
 
-import { Globe, Code2, Camera, Mail } from "lucide-react";
+import { Globe, Camera, MessageCircle } from "lucide-react";
 
 const socialLinks = [
   { Icon: Globe, label: "LinkedIn", href: "https://linkedin.com" },
-  { Icon: Code2, label: "GitHub", href: "https://github.com" },
   { Icon: Camera, label: "Instagram", href: "https://www.instagram.com/erdevlabs?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" },
-  { Icon: Mail, label: "Email", href: "mailto:elias@erdevlabs.com" },
+  { Icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/50663216443?text=Hola%2C%20me%20gustar%C3%ADa%20ponerme%20en%20contacto%20con%20el%20equipo%20de%20ERDevLabs." },
 ];
 
 const serviceLinks = [
@@ -17,7 +16,12 @@ const serviceLinks = [
   "Consultoría",
 ];
 
-const companyLinks = ["Blog", "Sobre nosotros", "Términos", "Privacidad"];
+const companyLinks = [
+  { label: "Blog", href: "#nosotros" },
+  { label: "Sobre nosotros", href: "#nosotros" },
+  { label: "Términos", href: "/terminos" },
+  { label: "Privacidad", href: "/privacidad" },
+];
 
 export default function FooterSection() {
   return (
@@ -145,13 +149,13 @@ export default function FooterSection() {
                   Empresa
                 </p>
                 <ul className="space-y-3">
-                  {companyLinks.map((s) => (
-                    <li key={s}>
+                  {companyLinks.map((link) => (
+                    <li key={link.label}>
                       <a
-                        href="#nosotros"
+                        href={link.href}
                         className="block text-[13px] text-white/60 font-semibold hover:text-brand-purple transition-colors duration-200"
                       >
-                        {s}
+                        {link.label}
                       </a>
                     </li>
                   ))}
@@ -159,37 +163,11 @@ export default function FooterSection() {
               </div>
             </div>
 
-            {/* Bottom: copyright + email subscription */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-t border-white/7 pt-6">
-              <p className="text-xs text-white/30 self-end md:self-auto">
-                © 2025 ERDevLabs. Todos los derechos reservados.
+            {/* Bottom: copyright */}
+            <div className="border-t border-white/7 pt-6">
+              <p className="text-xs text-white/30">
+                © 2026 ERDevLabs. Todos los derechos reservados.
               </p>
-
-              {/* Email subscription */}
-              <div className="flex flex-col gap-3 w-full md:w-auto">
-                <div>
-                  <span className="text-sm text-white/50">
-                    La tecnología avanza rápido.
-                  </span>
-                  <span className="block text-lg font-bold text-white/90">
-                    Quedá adelante con ERDevLabs.
-                  </span>
-                </div>
-                <div className="flex gap-1 bg-white border border-white/10 rounded-2xl p-1">
-                  <input
-                    type="email"
-                    placeholder="Tu correo electrónico"
-                    className="flex-1 px-3 py-2 text-[13px] bg-transparent text-gray-900 placeholder-gray-400 outline-none min-w-0"
-                    aria-label="Tu correo electrónico"
-                  />
-                  <button
-                    type="submit"
-                    className="px-4 py-2.5 bg-black text-white rounded-lg hover:bg-black/80 text-[13px] font-semibold transition-colors flex-shrink-0"
-                  >
-                    Suscribirse
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>

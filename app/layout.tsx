@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -10,11 +11,11 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "ERDevLabs — Soluciones Digitales que Convierten.",
+  title: "ERDevLabs: Soluciones Digitales que Convierten.",
   description:
     "Construimos software de alto impacto para empresas que quieren escalar. Webs de negocio, tiendas online, software a medida y consultoría tecnológica.",
   openGraph: {
-    title: "ERDevLabs — Soluciones Digitales que Convierten.",
+    title: "ERDevLabs: Soluciones Digitales que Convierten.",
     description:
       "Construimos software de alto impacto para empresas que quieren escalar.",
     type: "website",
@@ -28,7 +29,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={spaceGrotesk.variable}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <WhatsAppButton />
+      </body>
     </html>
   );
 }

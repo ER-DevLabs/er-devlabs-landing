@@ -9,6 +9,7 @@ import {
   Wrench,
   BarChart2,
   Terminal,
+  Bot,
   Plus,
 } from "lucide-react";
 
@@ -55,6 +56,12 @@ const services = [
     title: "Consultoría Técnica",
     desc: "Asesoría en arquitectura, stack y decisiones de producto.",
   },
+  {
+    num: "08",
+    Icon: Bot,
+    title: "Chatbots & Automatización",
+    desc: "Asistentes conversacionales con IA para automatizar atención al cliente, ventas y procesos internos.",
+  },
 ];
 
 export default function ServicesSection() {
@@ -78,7 +85,7 @@ export default function ServicesSection() {
             ¿Qué construimos juntos?
           </h2>
           <p className="text-base text-white/50 max-w-xl mb-16 leading-relaxed">
-            Desde la idea hasta el lanzamiento — cubrimos todo el ciclo de
+            Desde la idea hasta el lanzamiento, cubrimos todo el ciclo de
             desarrollo digital con calidad y precisión.
           </p>
         </motion.div>
@@ -108,7 +115,7 @@ export default function ServicesSection() {
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 7 * 0.07 }}
+            transition={{ duration: 0.5, delay: 8 * 0.07 }}
             className="bg-brand-surface border-2 border-dashed border-white/10 rounded-3xl p-7 flex flex-col items-center justify-center text-center gap-4 hover:opacity-75 transition-opacity cursor-default min-h-[180px]"
           >
             <Plus size={32} className="text-white/30" aria-hidden="true" />

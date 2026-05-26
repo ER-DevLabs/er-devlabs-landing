@@ -95,7 +95,9 @@ export default function Navbar() {
 
           {/* CTA */}
           <a
-            href="mailto:elias@erdevlabs.com"
+            href="https://wa.me/50663216443?text=Hola%2C%20vi%20su%20sitio%20web%20y%20me%20gustar%C3%ADa%20hablar%20sobre%20c%C3%B3mo%20ERDevLabs%20puede%20ayudarme."
+            target="_blank"
+            rel="noopener noreferrer"
             className={[
               "hidden md:inline-flex rounded-full px-4 py-2 text-[13px] font-semibold text-white ml-1 flex-shrink-0",
               "bg-gradient-to-r from-brand-purple to-brand-cyan hover:opacity-85 transition-[opacity,box-shadow] duration-200",
@@ -150,7 +152,9 @@ export default function Navbar() {
               </motion.a>
             ))}
             <motion.a
-              href="mailto:elias@erdevlabs.com"
+              href="https://wa.me/50663216443?text=Hola%2C%20vi%20su%20sitio%20web%20y%20me%20gustar%C3%ADa%20hablar%20sobre%20c%C3%B3mo%20ERDevLabs%20puede%20ayudarme."
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: navLinks.length * 0.04 }}

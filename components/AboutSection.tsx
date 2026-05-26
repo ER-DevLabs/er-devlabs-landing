@@ -27,7 +27,7 @@ const values = [
 ];
 
 const stats = [
-  { value: "2+", label: "Años de experiencia" },
+  { value: "3+", label: "Años de experiencia" },
   { value: "3+", label: "Proyectos entregados" },
   { value: "LATAM", label: "Mercado objetivo" },
 ];
@@ -57,7 +57,7 @@ export default function AboutSection() {
             Somos un estudio de desarrollo de software con base en Costa Rica,
             especializado en construir productos digitales que generan resultados
             medibles. Combinamos diseño, tecnología y estrategia para convertir tus
-            ideas en plataformas que realmente funcionan — con el rigor de un equipo
+            ideas en plataformas que realmente funcionan, con el rigor de un equipo
             senior y la agilidad de un estudio boutique.
           </p>
         </motion.div>
@@ -94,7 +94,7 @@ export default function AboutSection() {
         >
           {stats.map((stat, i) => (
             <div
-              key={stat.value}
+              key={stat.label}
               className={`p-7 text-center ${i < stats.length - 1 ? "border-r border-white/7" : ""}`}
             >
               <div className="text-4xl font-bold bg-gradient-to-r from-brand-purple to-brand-cyan bg-clip-text text-transparent leading-none">

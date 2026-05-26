@@ -116,7 +116,7 @@ export default function PricingSection() {
             Inversión clara, resultados reales.
           </h2>
           <p className="text-base text-white/50 max-w-xl leading-relaxed">
-            Todos los precios en USD. Sin costos ocultos — lo que ves es lo que pagás.
+            Todos los precios en USD. Sin costos ocultos, lo que ves es lo que pagás.
           </p>
         </motion.div>
 
@@ -161,7 +161,9 @@ export default function PricingSection() {
               </ul>
 
               <a
-                href="mailto:elias@erdevlabs.com"
+                href={`https://wa.me/50663216443?text=Hola%2C%20me%20interesa%20cotizar%20el%20plan%20${encodeURIComponent(plan.name)}%20de%20ERDevLabs.`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`block text-center w-full py-3 rounded-2xl font-semibold text-sm transition-colors ${
                   plan.featured
                     ? "bg-gradient-to-r from-brand-purple to-brand-cyan text-white hover:opacity-90"
@@ -206,7 +208,9 @@ export default function PricingSection() {
               </ul>
             </div>
             <a
-              href="mailto:elias@erdevlabs.com"
+              href="https://wa.me/50663216443?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20llamada%20gratuita%20para%20discutir%20mi%20proyecto%20a%20medida%20con%20ERDevLabs."
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex-shrink-0 bg-brand-cyan/10 border border-brand-cyan/40 text-white px-6 py-3 rounded-2xl font-semibold text-sm hover:bg-brand-cyan/20 transition-colors whitespace-nowrap"
             >
               Agendar llamada gratuita →

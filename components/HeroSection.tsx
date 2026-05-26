@@ -63,7 +63,7 @@ export default function HeroSection() {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="max-w-xl text-base text-white/55 leading-[1.7] mb-12"
         >
-          No solo código — transformación real. Convertimos ideas en plataformas,
+          No solo código, sino transformación real. Convertimos ideas en plataformas,
           datos en decisiones, y objetivos en logros medibles.
         </motion.p>
 
@@ -81,7 +81,9 @@ export default function HeroSection() {
             Ver nuestros proyectos
           </a>
           <a
-            href="mailto:elias@erdevlabs.com"
+            href="https://wa.me/50663216443?text=Hola%2C%20me%20interesa%20hablar%20sobre%20c%C3%B3mo%20convertir%20mi%20idea%20en%20una%20plataforma%20digital%20con%20ERDevLabs."
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-transparent border border-white/20 text-white rounded-full px-7 py-3.5 font-semibold hover:border-white/50 hover:bg-white/5 transition-all duration-200"
           >
             Hablemos

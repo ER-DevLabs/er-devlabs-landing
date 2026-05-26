@@ -17,6 +17,13 @@ const projects = [
     span: "md:col-span-5",
     href: "https://www.solucionesintegralesrq.com/",
   },
+  {
+    title: "Naturamastore",
+    category: "E-commerce · Natural",
+    bgClass: "from-orange-900 via-amber-900 to-brand-dark",
+    span: "md:col-span-12",
+    href: "https://naturamastore.com/",
+  },
 ];
 
 export default function ProjectsSection() {

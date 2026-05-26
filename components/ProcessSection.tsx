@@ -57,7 +57,7 @@ export default function ProcessSection() {
             Cómo trabajamos juntos.
           </h2>
           <p className="text-base text-white/50 max-w-2xl mx-auto leading-relaxed">
-            Seguimos un proceso ágil basado en Scrum — iterativo, transparente y
+            Seguimos un proceso ágil basado en Scrum, iterativo, transparente y
             orientado a resultados medibles desde el día uno.
           </p>
         </motion.div>
